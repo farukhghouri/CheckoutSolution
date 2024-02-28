@@ -14,7 +14,9 @@ namespace CheckoutService
 
         public int GenerateBill()
         {
-            return _stocks.First().Price;
+            return _stocks.GroupBy(s=> s.Name)
+                .Select(i=> i.Sum(i=> i.Price))
+                .Sum();
         }
     }
 }
