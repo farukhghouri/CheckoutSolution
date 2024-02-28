@@ -52,11 +52,10 @@ namespace CheckoutKataTests
             Assert.AreEqual(expectedBill, bill, "Incorrect multiple unit price calculated");
         }
 
-        [TestMethod]
         [DataTestMethod]
         [DataRow("A", 50, 130, 3)]
         [DataRow("B", 30, 45, 2)]
-        public void ShouldBeAbleToAddSinglePircingRule(string stockName, int stockPrice, int specialPrice, int numberOfProducts)
+        public void ShouldBeAbleToApplySinglePircingRule(string stockName, int stockPrice, int specialPrice, int numberOfProducts)
         {
             //arrange
             var stock = new Stock() { Name = stockName, Price = stockPrice };
@@ -73,6 +72,24 @@ namespace CheckoutKataTests
 
             //assert
             Assert.AreEqual(expectedBill, bill, "Incorrect single pricing rule calculated");
+        }
+
+        [TestMethod]
+        public void ShouldBeAbleToApplyMultiplePircingRule()
+        {
+            //arrange
+            var stock = new Stock() { Name = "A", Price = 50 };
+            var anotherStock = new Stock() { Name = "B", Price = 30 };
+
+            var expectedBill = 175;
+
+            checkout.AddStock(stock, stock, stock, anotherStock,anotherStock);
+
+            //act
+            var bill = checkout.GenerateBill();
+
+            //assert
+            Assert.AreEqual(expectedBill, bill, "Incorrect multiple pricing rule calculated");
         }
     }
 }
