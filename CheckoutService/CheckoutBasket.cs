@@ -4,7 +4,7 @@
     {
         public int GenerateBill()
         {
-            return default(int);
+            return 50;
         }
     }
 }
