@@ -5,6 +5,8 @@ namespace CheckoutService
     public class CheckoutBasket
     {
         private readonly List<Stock> _stocks = new();
+        private readonly List<SpecialPriceRule> _specialPriceRules = new();
+
 
         public void AddStock(Stock stock)
         {
@@ -16,11 +18,34 @@ namespace CheckoutService
             _stocks.AddRange(stocks);
         }
 
+        public void AddPricingRule(SpecialPriceRule specialPriceRule)
+        {
+            _specialPriceRules.Add(specialPriceRule);
+        }
+
         public int GenerateBill()
         {
-            return _stocks.GroupBy(s=> s.Name)
-                .Select(i=> i.Sum(i=> i.Price))
-                .Sum();
+            var totalBill = 0;
+
+            foreach (var rule in _specialPriceRules)
+            {
+                var stocksCount = _stocks.Count(s => s.Name == rule.PricingName);
+
+                if (stocksCount >= rule.StockCount)
+                {
+                    var specialPrice = stocksCount / rule.StockCount;
+                    var regularPrice = stocksCount % rule.StockCount;
+
+                    totalBill += specialPrice * rule.SpecialPriceTotal;
+                    totalBill += regularPrice * rule.StockUnitPrice;
+                }
+                else
+                {
+                    totalBill += stocksCount * rule.StockUnitPrice;
+                }
+            }
+
+            return totalBill;
         }
     }
 }
