@@ -1,4 +1,5 @@
 using CheckoutService;
+using CheckoutService.Model;
 
 namespace CheckoutKataTests
 {
@@ -10,8 +11,11 @@ namespace CheckoutKataTests
         {
             //arrange
             var checkout = new CheckoutBasket();
-            var expectedBill = 50;
 
+            var stock = new Stock() { Name = "A", Price = 50 };
+            checkout.AddStock(stock);
+
+            var expectedBill = 50;
             //act
             var bill = checkout.GenerateBill();
 
