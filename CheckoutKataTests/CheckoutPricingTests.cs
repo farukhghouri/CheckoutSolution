@@ -15,8 +15,7 @@ namespace CheckoutKataTests
             var pricingRuleForA = new SpecialPriceRule { PricingName = "A", StockCount = 3, StockUnitPrice = 50, SpecialPriceTotal = 130 };
             var pricingRuleForB = new SpecialPriceRule { PricingName = "B", StockCount = 2, StockUnitPrice = 30, SpecialPriceTotal = 45 };
 
-            checkout.AddPricingRule(pricingRuleForA);
-            checkout.AddPricingRule(pricingRuleForB);
+            checkout.AddPricingRule(pricingRuleForA, pricingRuleForB);
         }
 
         [DataTestMethod]
@@ -54,14 +53,20 @@ namespace CheckoutKataTests
         }
 
         [TestMethod]
-        public void ShouldBeAbleToAddSinglePircingRule()
+        [DataTestMethod]
+        [DataRow("A", 50, 130, 3)]
+        [DataRow("B", 30, 45, 2)]
+        public void ShouldBeAbleToAddSinglePircingRule(string stockName, int stockPrice, int specialPrice, int numberOfProducts)
         {
             //arrange
-            var stock = new Stock() { Name = "A", Price = 50 };
+            var stock = new Stock() { Name = stockName, Price = stockPrice };
 
-            var expectedBill = 130;
-            
-            checkout.AddStock(stock, stock, stock);
+            var expectedBill = specialPrice;
+
+            for (int start = 0; start < numberOfProducts; start++)
+            {
+                checkout.AddStock(stock);
+            }
 
             //act
             var bill = checkout.GenerateBill();

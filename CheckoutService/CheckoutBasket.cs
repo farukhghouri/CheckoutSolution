@@ -23,6 +23,10 @@ namespace CheckoutService
             _specialPriceRules.Add(specialPriceRule);
         }
 
+        public void AddPricingRule(params SpecialPriceRule[] specialPriceRules)
+        {
+            _specialPriceRules.AddRange(specialPriceRules);
+        }
         public int GenerateBill()
         {
             var totalBill = 0;
