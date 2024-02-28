@@ -7,6 +7,8 @@ namespace CheckoutKataTests
     [TestClass]
     public class CheckoutPricingTests
     {
+        private readonly CheckoutBasket checkout = new();
+
         [DataTestMethod]
         [DataRow("A", 50, 50)]
         [DataRow("B", 30, 30)]
@@ -15,8 +17,6 @@ namespace CheckoutKataTests
         public void ShouldBeAbleToCalculateSingleUnitPrice(string stockName, int stockPrice, int expectedBill)
         {
             //arrange
-            var checkout = new CheckoutBasket();
-
             var stock = new Stock() { Name = stockName, Price = stockPrice };
             checkout.AddStock(stock);
 
@@ -31,15 +31,12 @@ namespace CheckoutKataTests
         public void ShouldBeAbleToCalculateMultipleUnitPrice()
         {
             //arrange
-            var checkout = new CheckoutBasket();
-
             var stock = new Stock() { Name = "A", Price = 50 };
             var anotherStock = new Stock() { Name = "B", Price = 30 };
 
             var expectedBill = stock.Price + anotherStock.Price;
 
-            checkout.AddStock(stock);
-            checkout.AddStock(anotherStock);
+            checkout.AddStock(stock, anotherStock);
 
             //act
             var bill = checkout.GenerateBill();

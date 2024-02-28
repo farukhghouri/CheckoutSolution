@@ -6,10 +6,14 @@ namespace CheckoutService
     {
         private readonly List<Stock> _stocks = new();
 
-
         public void AddStock(Stock stock)
         {
             _stocks.Add(stock);
+        }
+
+        public void AddStock(params Stock[] stocks)
+        {
+            _stocks.AddRange(stocks);
         }
 
         public int GenerateBill()
