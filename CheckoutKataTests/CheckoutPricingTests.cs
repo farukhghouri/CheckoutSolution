@@ -6,16 +6,19 @@ namespace CheckoutKataTests
     [TestClass]
     public class CheckoutPricingTests
     {
-        [TestMethod]
-        public void ShouldBeAbleToCalculateUnitPrice()
+        [DataTestMethod]
+        [DataRow("A", 50, 50)]
+        [DataRow("B", 30, 30)]
+        [DataRow("C", 20, 20)]
+        [DataRow("D", 15, 15)]
+        public void ShouldBeAbleToCalculateUnitPrice(string stockName, int stockPrice, int expectedBill)
         {
             //arrange
             var checkout = new CheckoutBasket();
 
-            var stock = new Stock() { Name = "A", Price = 50 };
+            var stock = new Stock() { Name = stockName, Price = stockPrice };
             checkout.AddStock(stock);
 
-            var expectedBill = 50;
             //act
             var bill = checkout.GenerateBill();
 
